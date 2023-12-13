@@ -72,9 +72,9 @@
                             <!-- svelte-ignore a11y-click-events-have-key-events -->
                             <!-- svelte-ignore a11y-no-static-element-interactions -->
                             {#if passwordVisible}
-                                <span class="z-10 bg-no-repeat bg-center bg-[url('/eye.svg')] cursor-pointer w-6 h-6 absolute right-2 bottom-1.5" on:click={toggleVisible} />
-                            {:else}
                                 <span class="z-10 bg-no-repeat bg-center bg-[url('/eye-off.svg')] cursor-pointer w-6 h-6 absolute right-2 bottom-1.5" on:click={toggleVisible} />
+                            {:else}
+                                <span class="z-10 bg-no-repeat bg-center bg-[url('/eye.svg')] cursor-pointer w-6 h-6 absolute right-2 bottom-1.5" on:click={toggleVisible} />
                             {/if}
                         </div>
                     </div>
