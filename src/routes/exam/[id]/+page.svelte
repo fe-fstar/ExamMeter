@@ -1,6 +1,5 @@
 <script>
     import Button from "../../../components/Button.svelte";
-    import { slide } from 'svelte/transition';
 
     let exam = {
         id: "regEx-Kolta",
