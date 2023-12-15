@@ -171,7 +171,7 @@
                         </h2>
                     </div>
                     <div>
-                        <form class="child:last:mx-auto">
+                        <form>
                             <div class="flex flex-col items-start my-6">
                                 <label for="one"
                                     >Sınav zorluğunu derecelendirin</label
