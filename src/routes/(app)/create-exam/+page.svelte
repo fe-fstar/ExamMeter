@@ -153,11 +153,12 @@
                             </div>
                             <!-- svelte-ignore a11y-no-static-element-interactions -->
                             <div class="flex justify-between">
-                                <div>
+                                <div class="flex items-center">
                                     <input
                                         type="radio"
                                         name="option_{indexQuestion}"
                                         bind:value={option.isCorrect}
+                                        class="cursor-pointer"
                                     />
                                     <label
                                         for="option_{indexQuestion}"
@@ -193,7 +194,7 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <div
-                        class="basis-3/5 flex justify-center items-center h-10 cursor-pointer border border-black w-min"
+                        class="basis-full flex justify-center items-center h-10 cursor-pointer border border-black w-min"
                         on:click={() => {
                             question.options.push({
                                 text: "",

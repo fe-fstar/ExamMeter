@@ -1,6 +1,5 @@
 <script>
     import ExamCard from "../../../components/ExamCard.svelte";
-    import Button from "../../../components/Button.svelte";
 
     let role = "teacher";
     let exams = [
@@ -65,11 +64,6 @@
     </div>
 {:else if role === "teacher"}
     <div class="flex flex-wrap gap-4 justify-evenly">
-        <h1 class="basis-full">Eylemler</h1>
-        <div class="basis-full flex justify-evenly items-center descendant:text-custom_white">
-            <Button>Sınav Oluştur</Button>
-            <Button>Analiz İçin Dosya Yükle</Button>
-        </div>
         <h1 class="basis-full">Geçmiş Sınavlar</h1>
         {#each exams as exam}
             <ExamCard {exam} />
