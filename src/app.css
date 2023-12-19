@@ -107,8 +107,3 @@ h6 {
         transition: none !important;
     }
 }
-
-::selection {
-    color: #181818;
-    background-color: #F7F7F7;
-}

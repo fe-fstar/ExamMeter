@@ -2,14 +2,18 @@
     import { onDestroy, onMount } from "svelte";
     import Button from "../../../components/Button.svelte";
 
+    let feedbackOne = 1;
+    let feedbackTwo = 1;
+    let feedbackThree = 1;
+
     let exam = {
         id: "regEx-Kolta",
         title: "ANN Midterm",
         class: "Artificial Neural Networks CSE-1234",
         description:
             "Add the exam sheet to your report XDDDDDDDDDDDDDDDDDDDDDDD",
-        startsAt: new Date(2023, 11, 13, 17, 51, 30),
-        endsAt: new Date(2023, 11, 13, 17, 52, 0),
+        startsAt: new Date(2023, 11, 17, 18, 29, 30),
+        endsAt: new Date(2023, 11, 17, 18, 31, 0),
         jumpingEnabled: false,
         questions: [
             {
@@ -42,7 +46,7 @@
     };
 
     let studentAnswers = [];
-    let currentQuestionIndex = exam.questions.length;
+    let currentQuestionIndex = -1;
     let timeForExamToStart = 0;
     let timeForExamToEnd = 0;
     let intervalBeforeExam;
@@ -174,23 +178,47 @@
                         <form>
                             <div class="flex flex-col items-start my-6">
                                 <label for="one"
-                                    >Sınav zorluğunu derecelendirin</label
+                                    >Sınav zorluğunu derecelendirin (1: Çok kolay - 10: Çok zor: <span class="font-bold">{feedbackOne}</span></label
                                 >
-                                <input type="number" name="one" class="w-full"/>
+                                <input
+                                    type="range"
+                                    name="one"
+                                    min="1"
+                                    max="10"
+                                    step="1"
+                                    class="w-full"
+                                    bind:value={feedbackOne}
+                                />
                             </div>
                             <div class="flex flex-col items-start my-6">
                                 <label for="two"
                                     >Sınav konularının ve içeriğinin ders ile
-                                    alaka durumunu derecelendirin</label
+                                    alaka durumunu derecelendirin (1: Tamamen alakasız - 10: Tamamen alakalı): <span class="font-bold">{feedbackTwo}</span></label
                                 >
-                                <input type="number" name="two" class="w-full"/>
+                                <input
+                                    type="range"
+                                    name="two"
+                                    min="1"
+                                    max="10"
+                                    step="1"
+                                    class="w-full"
+                                    bind:value={feedbackTwo}
+                                />
                             </div>
                             <div class="flex flex-col items-start my-6">
                                 <label for="two"
                                     >Sınav soru türlerinin ders pratiği ile
-                                    alaka durumunu değerlendirin</label
+                                    alaka durumunu değerlendirin (1: Tamamen alakasız - 10: Tamamen alakalı): <span class="font-bold">{feedbackThree}</span></label
                                 >
-                                <input type="number" name="two" class="w-full"/>
+                                <input
+                                    type="range"
+                                    name="three"
+                                    min="1"
+                                    max="10"
+                                    step="1"
+                                    class="w-full"
+                                    bind:value={feedbackThree}
+                                />
                             </div>
                             <div class="grid place-items-center">
                                 <Button>Gönder</Button>
