@@ -1,15 +1,262 @@
 <script>
+    import QuestionTable from "../../../../components/QuestionTable.svelte";
+
     let meanScore = 65;
     let standardDeviation = 7.2;
     let feedbackOneScore = 6.6;
     let feedbackTwoScore = 3.1;
     let feedbackThreeScore = 8.3;
+
+    let questions = [
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+    ];
 </script>
 
 <div class="flex flex-col descendant:flex-wrap w-full divide-y">
     <div class="flex items-center child:basis-1/2">
         <div>
-            <div class="flex justify-evenly items-center child:flex child:flex-col child:items-center">
+            <div
+                class="flex justify-evenly items-center child:flex child:flex-col child:items-center"
+            >
                 <div>
                     <h2>Ortalama Not:</h2>
                     <h2>{meanScore}</h2>
@@ -21,17 +268,27 @@
             </div>
         </div>
         <div>
-            <div class="flex flex-col child:flex child:justify-start child:items-center">
+            <div
+                class="flex flex-col child:flex child:justify-start child:items-center"
+            >
                 <div>
-                    <h3 class="basis-3/4">Öğrenci geri bildiriminden gelen ortalama sınav zorluğu</h3>
+                    <h3 class="basis-3/4">
+                        Öğrenci geri bildiriminden gelen ortalama sınav zorluğu
+                    </h3>
                     <h3 class="basis-1/4">{feedbackOneScore} / 10</h3>
                 </div>
                 <div>
-                    <h3 class="basis-3/4">Öğrenci geri bildiriminden gelen ortalama sınav konu alaka derecesi</h3>
+                    <h3 class="basis-3/4">
+                        Öğrenci geri bildiriminden gelen ortalama sınav konu
+                        alaka derecesi
+                    </h3>
                     <h3 class="basis-1/4">{feedbackTwoScore} / 10</h3>
                 </div>
                 <div>
-                    <h3 class="basis-3/4">Öğrenci geri bildiriminden gelen ortalama sınav soru metodu alaka derecesi</h3>
+                    <h3 class="basis-3/4">
+                        Öğrenci geri bildiriminden gelen ortalama sınav soru
+                        metodu alaka derecesi
+                    </h3>
                     <h3 class="basis-1/4">{feedbackThreeScore} / 10</h3>
                 </div>
             </div>
@@ -42,6 +299,6 @@
         <h1>Buraya grafikler gelecek</h1>
     </div>
     <div class="grid place-items-center">
-        <h1>Buraya tablo gelecek</h1>
+        <QuestionTable questions={questions}/>
     </div>
 </div>
