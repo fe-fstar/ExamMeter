@@ -1,5 +1,6 @@
 <script>
     export let exam;
+    import { onMount } from "svelte";
     import ConfirmAction from "./ConfirmAction.svelte";
 
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -13,6 +14,19 @@
         promptDeletion = false;
         console.log("### Item delete simulation ###");
     }
+
+    let element;
+    let clickable;
+
+    onMount(() => {
+        console.log(new Date(exam.startTime));
+        clickable = new Date(exam.startTime) > Date.now();
+        if (clickable) {
+            element.addEventListener("click", () => {
+                location.href = `/exam/${exam.id}`;
+            });
+        }
+    });
 </script>
 
 <ConfirmAction
@@ -24,23 +38,30 @@
     }}
 />
 <div
-    class="rounded-lg bg-gradient-to-br from-slate-700 to-gray-800 hover:shadow-gray-800 cursor-pointer shadow-gray-800 shadow-md duration-200 hover:shadow-lg descendant:text-custom_white flex flex-col p-4"
+    bind:this={element}
+    class="basis-1/4 rounded-lg bg-gradient-to-br from-slate-700 to-gray-800 {clickable
+        ? 'cursor-pointer hover:shadow-gray-800 hover:shadow-lg'
+        : 'opacity-[85%]'} shadow-gray-800 shadow-md duration-200 descendant:text-custom_white flex flex-col p-4"
 >
     <div class="basis-4/12 flex items-center justify-start">
-        <h3>{exam.class}</h3>
+        <h3>{exam.className}</h3>
     </div>
     <div class="basis-4/12 flex items-center justify-start">
         <h4>{exam.title}</h4>
     </div>
     <div class="basis-1/12 flex items-center justify-start">
-        <h5>{exam.startsAt.toLocaleDateString("tr-TR", options)}</h5>
+        <h5>{new Date(exam.startTime).toLocaleDateString("tr-TR", options)}</h5>
     </div>
-    {#if exam.startsAt > Date.now()}
+    {#if new Date(exam.startTime) > Date.now()}
         <div class="basis-1/12 flex items-center justify-evenly child:rounded">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
             <div
                 class="h-8 border bg-custom_white grid place-items-center cursor-pointer px-6 hover:opacity-70 transition shadow shadow-custom_white duration:200"
+                on:click={(e) => {
+                    e.stopPropagation();
+                    location.href = `/edit-exam/${exam.id}`;
+                }}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +82,8 @@
             <!-- svelte-ignore a11y-no-static-element-interactions -->
             <div
                 class="h-8 border bg-custom_white grid place-items-center cursor-pointer px-6 hover:opacity-70 transition shadow shadow-custom_white duration:200"
-                on:click={() => {
+                on:click={(e) => {
+                    e.stopPropagation();
                     promptDeletion = true;
                 }}
             >

@@ -1,22 +1,44 @@
-<div class="container">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-</div>
+<script>
+    export let loading = false;
+</script>
+
+{#if loading}
+    <div class="backdrop">
+        <div class="container">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </div>
+{:else}
+    <slot />
+{/if}
 
 <style>
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 100;
+        display: grid;
+        place-items: center;
+    }
     .container {
+        z-index: 101;
         --uib-size: 120px;
-        --uib-color: black;
+        --uib-color: white;
         --uib-speed: 1s;
         --uib-stroke: 9px;
         position: relative;

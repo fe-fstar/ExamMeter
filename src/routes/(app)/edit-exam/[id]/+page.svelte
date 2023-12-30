@@ -71,9 +71,7 @@
     });
 </script>
 
-{#if loading}
-    <Loading />
-{:else}
+<Loading loading={loading}>
     <div class="rounded-md descendant:text-custom_black">
         <h1>Sınav Düzenleyin</h1>
         <form
@@ -294,4 +292,4 @@
             </div>
         </form>
     </div>
-{/if}
+</Loading>

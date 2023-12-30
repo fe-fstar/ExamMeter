@@ -2,14 +2,27 @@
   import { onMount } from "svelte";
   import "../../app.css";
   import { scale, fade } from "svelte/transition";
+  import { backendUrl } from "../../api/backend-url";
 
   let mobileMenu = false;
   let profileDropdown = false;
-  let role = "student";
+  let role;
 
   let directory;
-  onMount(() => {
+  onMount(async () => {
     directory = location.pathname.match(/^\/([^\/]*)/)[1];
+
+    let response = await fetch(`${backendUrl}/get_role`, {
+      headers: {
+        "Content-Type": "application/json",
+        token: localStorage.token,
+      },
+    });
+    let parsed_response = await response.json();
+
+    if (parsed_response.success) {
+      role = parsed_response.role;
+    }
   });
 </script>
 
@@ -38,26 +51,28 @@
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
                     aria-current="page">Geçmiş Sınavlar</a
                   >
-                  <a
-                    on:click={() => {
-                      directory = "create-exam";
-                    }}
-                    href="/create-exam"
-                    class="{directory === 'create-exam'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
-                    >Sınav Oluştur</a
-                  >
-                  <a
-                    on:click={() => {
-                      directory = "upload-exam-file";
-                    }}
-                    href="/upload-exam-file"
-                    class="{directory === 'upload-exam-file'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
-                    >Analiz İçin Dosya Yükle</a
-                  >
+                  {#if role === "teacher"}
+                    <a
+                      on:click={() => {
+                        directory = "create-exam";
+                      }}
+                      href="/create-exam"
+                      class="{directory === 'create-exam'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
+                      >Sınav Oluştur</a
+                    >
+                    <a
+                      on:click={() => {
+                        directory = "upload-exam-file";
+                      }}
+                      href="/upload-exam-file"
+                      class="{directory === 'upload-exam-file'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
+                      >Analiz İçin Dosya Yükle</a
+                    >
+                  {/if}
                 </div>
               </div>
             </div>
@@ -185,35 +200,35 @@
           <div class="space-y-1 px-2 py-3 sm:px-3">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <a
-                    on:click={() => {
-                      directory = "home";
-                    }}
-                    href="/home"
-                    class="{directory === 'home'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
-                    aria-current="page">Geçmiş Sınavlar</a
-                  >
-                  <a
-                    on:click={() => {
-                      directory = "create-exam";
-                    }}
-                    href="/create-exam"
-                    class="{directory === 'create-exam'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
-                    >Sınav Oluştur</a
-                  >
-                  <a
-                    on:click={() => {
-                      directory = "upload-exam-file";
-                    }}
-                    href="/upload-exam-file"
-                    class="{directory === 'upload-exam-file'
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
-                    >Analiz İçin Dosya Yükle</a
-                  >
+              on:click={() => {
+                directory = "home";
+              }}
+              href="/home"
+              class="{directory === 'home'
+                ? 'bg-gray-900 text-white'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
+              aria-current="page">Geçmiş Sınavlar</a
+            >
+            <a
+              on:click={() => {
+                directory = "create-exam";
+              }}
+              href="/create-exam"
+              class="{directory === 'create-exam'
+                ? 'bg-gray-900 text-white'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
+              >Sınav Oluştur</a
+            >
+            <a
+              on:click={() => {
+                directory = "upload-exam-file";
+              }}
+              href="/upload-exam-file"
+              class="{directory === 'upload-exam-file'
+                ? 'bg-gray-900 text-white'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
+              >Analiz İçin Dosya Yükle</a
+            >
           </div>
           <div class="border-t border-gray-700 pb-3 pt-4">
             <div class="flex items-center px-5">
@@ -255,9 +270,7 @@
       {/if}
     </nav>
     <header class="py-10">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-white">Ana Sayfa</h1>
-      </div>
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"></div>
     </header>
   </div>
 
