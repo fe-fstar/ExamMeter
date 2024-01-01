@@ -27,7 +27,6 @@
         }
 
         loading = false;
-        console.log(exams);
     });
 </script>
 

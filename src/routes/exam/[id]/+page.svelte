@@ -106,26 +106,27 @@
         examBody.id = exam.id;
         console.log(examBody);
 
-        // try {
-        //     let response = await fetch(`${backendUrl}/submit_exam`, {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify(examBody),
-        //     });
+        try {
+            let response = await fetch(`${backendUrl}/submit_exam`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: localStorage.token 
+                },
+                body: JSON.stringify(examBody),
+            });
 
-        //     let parsedResponse = await response.json();
+            let parsedResponse = await response.json();
 
-        //     if (parsedResponse.success) {
-        //         examSubmissionMessage = parsedResponse.message;
-        //         setTimeout(() => {
-        //             location.href = "/home";
-        //         }, 3000);
-        //     }
-        // } catch (error) {
-        //     examSubmissionMessage = "Bir hata oluştu: " + error.message;
-        // }
+            if (parsedResponse.success) {
+                examSubmissionMessage = parsedResponse.message;
+                setTimeout(() => {
+                    location.href = "/home";
+                }, 3000);
+            }
+        } catch (error) {
+            examSubmissionMessage = "Bir hata oluştu: " + error.message;
+        }
     }
 
     $: if (

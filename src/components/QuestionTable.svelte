@@ -25,10 +25,7 @@
                     class="text-center align-middle child:p-4 bg-slate-200 child:border child:border-slate-600/25 hover:bg-slate-200/50"
                 >
                     <td>{index + 1}</td>
-                    <td class="descendant:text-white"
-                        ><OptionTable
-                            data={{ index: index, ...question }}
-                        /></td
+                    <td><OptionTable data={{ index: index, ...question }} /></td
                     >
                     <td>{question.numberOfCorrectAnswers}</td>
                     <td>{question.numberOfWrongAnswers}</td>

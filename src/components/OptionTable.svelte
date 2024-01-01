@@ -11,7 +11,9 @@
     }
 </script>
 
-<Button on:click={toggleShowWindow}>Göster</Button>
+<div class="descendant:text-white">
+    <Button on:click={toggleShowWindow}>Göster</Button>
+</div>
 {#if showWindow}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -33,17 +35,31 @@
                 duration: 200,
             }}
         >
-        <svg on:click={toggleShowWindow} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-slot="icon" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-          
+            <svg
+                on:click={toggleShowWindow}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                data-slot="icon"
+                class="w-6 h-6"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                />
+            </svg>
+
             <div class="basis-1/6">
                 <h1>{data.index + 1}. Soru Cevap Dağılımı</h1>
             </div>
             <div class="basis-4/6 grid place-items-center my-4">
                 <table class="w-full">
                     <thead
-                        ><tr class="child:border child:border-slate-600/50 child:p-4 bg-black/5"
+                        ><tr
+                            class="child:border child:border-slate-600/50 child:p-4 bg-black/5"
                             ><th>Soru {data.index + 1}</th
                             >{#each data.options as _, optionIndex}
                                 <th>{String.fromCharCode(65 + optionIndex)}</th>
@@ -51,18 +67,23 @@
                         ></thead
                     >
                     <tbody>
-                        <tr class="child:border child:border-slate-600/50 child:p-4"
+                        <tr
+                            class="child:border child:border-slate-600/50 child:p-4"
                             ><td>Frekans</td>{#each data.options as option}
                                 <td>{option.frequency}</td>
                             {/each}</tr
                         >
-                        <tr class="child:border child:border-slate-600/50 child:p-4"
-                            ><td>Frekans Yüzdesi (%)</td>{#each data.options as option}
+                        <tr
+                            class="child:border child:border-slate-600/50 child:p-4"
+                            ><td>Frekans Yüzdesi (%)</td
+                            >{#each data.options as option}
                                 <td>{option.frequencyPercentage}</td>
                             {/each}</tr
                         >
-                        <tr class="child:border child:border-slate-600/50 child:p-4"
-                            ><td>Ayırt Edicilik Oranı</td>{#each data.options as option}
+                        <tr
+                            class="child:border child:border-slate-600/50 child:p-4"
+                            ><td>Ayırt Edicilik Oranı</td
+                            >{#each data.options as option}
                                 <td>{option.discriminationRatio}</td>
                             {/each}</tr
                         >

@@ -19,11 +19,10 @@
     let clickable;
 
     onMount(() => {
-        console.log(new Date(exam.startTime));
-        clickable = new Date(exam.startTime) > Date.now();
+        clickable = new Date(exam.endTime) < Date.now();
         if (clickable) {
             element.addEventListener("click", () => {
-                location.href = `/exam/${exam.id}`;
+                location.href = `/stats/${exam.id}`;
             });
         }
     });
@@ -49,10 +48,13 @@
     <div class="basis-4/12 flex items-center justify-start">
         <h4>{exam.title}</h4>
     </div>
-    <div class="basis-1/12 flex items-center justify-start">
+    <div class="basis-1/12 flex items-center justify-between">
         <h5>{new Date(exam.startTime).toLocaleDateString("tr-TR", options)}</h5>
+        {#if ("grade" in exam) && exam.grade}
+            <h3>{exam.grade}</h3>
+        {/if}
     </div>
-    {#if new Date(exam.startTime) > Date.now()}
+    {#if new Date(exam.startTime) > Date.now() && !("grade" in exam)}
         <div class="basis-1/12 flex items-center justify-evenly child:rounded">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
