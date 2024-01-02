@@ -1,6 +1,7 @@
 <script>
     import Button from "../../../components/Button.svelte";
     import { scale } from "svelte/transition";
+    import SelectQuestionsFromPool from "../../../components/SelectQuestionsFromPool.svelte";
 
     let exam = {
         id: "",
@@ -19,7 +20,28 @@
             },
         ],
     };
+
+    let modalQuestionPool = false;
+
+    function handleCancel() {
+        modalQuestionPool = false;
+    }
+
+    function handleConfirm({detail}) {
+        modalQuestionPool = false;
+        console.log("Bunlar seçildi:");
+        console.log(detail.selectedQuestionsFromPool);
+    }
 </script>
+
+<SelectQuestionsFromPool
+    showDialog={modalQuestionPool}
+    on:cancel={handleCancel}
+    on:confirm={handleConfirm}
+    on:click={() => {
+        modalQuestionPool = false;
+    }}
+/>
 
 <div class="rounded-md descendant:text-custom_black">
     <h1>Sınav Oluşturun</h1>
@@ -227,13 +249,20 @@
         >
             <Button
                 type={"button"}
+                on:click={(e) => {
+                    e.stopPropagation();
+                    modalQuestionPool = true;
+                }}>Havuzdan Soru Ekle</Button
+            >
+            <Button
+                type={"button"}
                 on:click={() => {
                     exam.questions.push({
                         text: "",
                         options: [{ text: "", isCorrect: false }],
                     });
                     exam.questions = [...exam.questions];
-                }}>Soru Ekle</Button
+                }}>Yeni Soru Ekle</Button
             >
             <Button>Sınavı Kaydet</Button>
         </div>
