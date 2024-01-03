@@ -5,33 +5,18 @@
     const dispatch = createEventDispatcher();
 
     import Button from "./Button.svelte";
+    import Loading from "./Loading.svelte";
 
     export let showDialog = false;
+    export let loading = false;
 
-    export let title = "Bu ders için soru havuzundaki sorular"
+    export let title = "Bu ders için soru havuzundaki sorular";
 
     export let confirmOption = "Soruları Eklemeyi Bitir";
     export let cancelOption = "İptal";
     let isReduced;
 
-    let questionsFromPool = [
-        {
-            text: "Test 1",
-            options: [{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: true },{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: false }],
-        },
-        {
-            text: "Test 2",
-            options: [{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: true },{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: false }],
-        },
-        {
-            text: "Test 3",
-            options: [{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: true },{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: false }],
-        },
-        {
-            text: "Test 4",
-            options: [{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: true },{ text: "Test cevap", isCorrect: false },{ text: "Test cevap", isCorrect: false }],
-        },
-    ];
+    export let questionsFromPool = [];
 
     let selectedQuestionsFromPool = [];
 
@@ -40,7 +25,7 @@
     };
 
     const handleConfirm = () => {
-        dispatch("confirm", {selectedQuestionsFromPool});
+        dispatch("confirm", { selectedQuestionsFromPool });
     };
 
     onMount(() => {
@@ -54,85 +39,108 @@
 </script>
 
 {#if showDialog}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-        class="backdrop"
-        in:fade={{ duration: isReduced ? 0 : 200 }}
-        out:fade={{ delay: isReduced ? 0 : 200, duration: isReduced ? 0 : 200 }}
-        on:click|self
-    >
+    <Loading {loading}>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
-            class="confirmation descendant:text-custom_black border border-white bg-slate-300 rounded-md"
-            in:fly={{
-                y: -10,
+            class="backdrop"
+            in:fade={{ duration: isReduced ? 0 : 200 }}
+            out:fade={{
                 delay: isReduced ? 0 : 200,
                 duration: isReduced ? 0 : 200,
             }}
-            out:fly={{
-                y: -10,
-                duration: isReduced ? 0 : 200,
-            }}
+            on:click|self
         >
-            <h3>{title}</h3>
-            <div class="poolContainer">
-                {#each questionsFromPool as question, indexQuestion}
-                <div class="flex flex-col" transition:scale={{ duration: 333 }}>
-                    <div>
-                        <div class="flex flex-col items-center">
-                            <div class="flex w-full items-center justify-evenly">
-                                <h3>{indexQuestion + 1}. Soru:</h3>
-                                <div class="descendant:text-custom_white">
-                                    <Button on:click={()=>{
-                                        let isFound = selectedQuestionsFromPool.filter((q)=> q.text === question.text)
-                                        if (isFound.length > 0){
-                                            selectedQuestionsFromPool = selectedQuestionsFromPool.filter((q) => q.text != question.text);
-                                        }else{
-                                            selectedQuestionsFromPool.push(question);
-                                            selectedQuestionsFromPool = selectedQuestionsFromPool;
-                                        }
-                                    }}>
-                                        {#if selectedQuestionsFromPool.filter((q)=> q.text === question.text).length > 0}
-                                        Çıkar
-                                        {:else}
-                                        Ekle
-                                        {/if}
-                                    </Button>
-                                </div>
-                            </div>
-                            {question.text}
-                        </div>
-                    </div>
-                    <div class="flex flex-row flex-wrap justify-evenly">
-                        {#each question.options as option, indexOption}
-                            <div
-                                class="flex flex-col gap-y-3 mb-4 mr-4 p-4 border child:flex child:items-center"
-                                transition:scale={{ duration: 333 }}
-                            >
-                                <div>
-                                    {String.fromCharCode(65 + indexOption)}
-                                    {option.text}
-                                </div>
-                                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                                <div class="flex justify-between">
-                                    <div class="flex items-center">
-                                        {#if option.isCorrect}
-                                        <label for="option_{indexQuestion}">Doğru cevap</label>
-                                        {/if}
+            <div
+                class="confirmation descendant:text-custom_black border border-white bg-gradient-to-br from-slate-200 to-slate-300 rounded-md"
+                in:fly={{
+                    y: -10,
+                    delay: isReduced ? 0 : 200,
+                    duration: isReduced ? 0 : 200,
+                }}
+                out:fly={{
+                    y: -10,
+                    duration: isReduced ? 0 : 200,
+                }}
+            >
+                <h3>{title}</h3>
+                <div class="poolContainer divide-y divide-black/30">
+                    {#each questionsFromPool as question, indexQuestion}
+                        <div
+                            class="flex flex-col gap-y-4 mb-4"
+                            transition:scale={{ duration: 333 }}
+                        >
+                            <div>
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="flex w-full items-center justify-evenly"
+                                    >
+                                        <h3>{indexQuestion + 1}. Soru:</h3>
                                     </div>
+                                    {question.text}
                                 </div>
                             </div>
-                        {/each}
-                    </div>
+                            <div class="flex flex-row flex-wrap justify-evenly">
+                                {#each question.options as option, indexOption}
+                                    <div
+                                        class="flex flex-col gap-y-3 mb-4 mr-4 p-4 border border-black child:flex child:items-center {option.correctAnswer
+                                            ? 'bg-green-400/50'
+                                            : ''}"
+                                        transition:scale={{ duration: 333 }}
+                                    >
+                                        <div>
+                                            {String.fromCharCode(
+                                                65 + indexOption,
+                                            )})
+                                            {option.text}
+                                        </div>
+                                    </div>
+                                {/each}
+                            </div>
+                            <div class="descendant:text-custom_white">
+                                <Button
+                                    on:click={() => {
+                                        if (
+                                            selectedQuestionsFromPool.includes(
+                                                question,
+                                            )
+                                        ) {
+                                            selectedQuestionsFromPool =
+                                                selectedQuestionsFromPool.filter(
+                                                    (q) =>
+                                                        q.examId !==
+                                                            question.examId &&
+                                                        q.index !==
+                                                            question.index,
+                                                );
+                                        } else {
+                                            selectedQuestionsFromPool.push(
+                                                question,
+                                            );
+                                            selectedQuestionsFromPool =
+                                                selectedQuestionsFromPool;
+                                        }
+                                    }}
+                                >
+                                    {#if selectedQuestionsFromPool.includes(question)}
+                                        Çıkar
+                                    {:else}
+                                        Ekle
+                                    {/if}
+                                </Button>
+                            </div>
+                        </div>
+                    {/each}
                 </div>
-            {/each}
-            </div>
-            <div class="buttonContainer descendant:text-custom_white">
-                <Button on:click={handleConfirm}>{confirmOption}</Button>
-                <Button on:click={handleCancel}>{cancelOption}</Button>
+                <div
+                    class="buttonContainer py-4 shadow-inner descendant:text-custom_white"
+                >
+                    <Button on:click={handleConfirm}>{confirmOption}</Button>
+                    <Button on:click={handleCancel}>{cancelOption}</Button>
+                </div>
             </div>
         </div>
-    </div>
+    </Loading>
 {/if}
 
 <style>
@@ -162,7 +170,7 @@
         padding-bottom: 12px;
         justify-content: space-evenly;
     }
-    .poolContainer{
+    .poolContainer {
         height: calc(100% - 10vh - 50px);
         overflow-y: scroll;
     }
