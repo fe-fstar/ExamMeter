@@ -1,5 +1,249 @@
 <script>
     import "../../../app.css";
+    import QuestionTable from "../../../components/QuestionTable.svelte";
+
+    let questions = [
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+        {
+            options: [
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+                {
+                    frequency: 4,
+                    frequencyPercentage: 12,
+                    discriminationRatio: 0.07,
+                },
+            ],
+            numberOfCorrectAnswers: 44,
+            numberOfWrongAnswers: 17,
+            numberOfEmptyAnswers: 4,
+            difficulty: "Çok Kolay",
+            discriminationRatio: 0.09,
+            discriminationStatus: "Madde çok zayıf, testten çıkarılmalı",
+        },
+    ];
 
     let dataForVisualization = [];
     let fileNameState = "Rapor";
@@ -248,11 +492,13 @@
   }
 </script>
 
-<div>
+<div class="flex flex-col items-center">
     <p>Lütfen cevap dosyasını sisteme yükleyiniz.</p>
-    <div class="icontainer">
+    <div class="icontainer mb-8 flex items-center">
         <input accept='.txt, .dat' type="file" on:change={(e) => txtOperations(e)} />
     </div>
 
-    <!-- TODO: Burada questiontable componenti olacak attr olarak data alacak dataForVisualization gönderilecek. -->
+    <div class="w-[85vw] max-w-6xl">
+        <QuestionTable questions={questions}/>
+    </div>
 </div>

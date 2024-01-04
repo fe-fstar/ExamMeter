@@ -95,7 +95,7 @@
                       <span class="sr-only">Open user menu</span>
                       <img
                         class="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src="https://www.wintechpratama.com/images/profile.jpg"
                         alt=""
                       />
                     </button>
@@ -120,22 +120,18 @@
                       aria-labelledby="user-menu-button"
                       tabindex="-1"
                     >
-                      <!-- Active: "bg-gray-100", Not Active: "" -->
                       <a
-                        href="/home"
-                        class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-                        aria-current="page">Geçmiş Sınavlar</a
-                      >
+                        href="#"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                      >Profil</a>
                       <a
-                        href="/create-exam"
-                        class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                        >Sınav Oluştur</a
-                      >
+                        href="#"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                      >Ayarlar</a>
                       <a
-                        href="/upload-exam-file"
-                        class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                        >Analiz İçin Dosya Yükle</a
-                      >
+                        href="#"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                      >Çıkış yap</a>
                     </div>
                   {/if}
                 </div>
@@ -209,6 +205,7 @@
                 : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
               aria-current="page">Geçmiş Sınavlar</a
             >
+            {#if role === "teacher"}
             <a
               on:click={() => {
                 directory = "create-exam";
@@ -229,22 +226,23 @@
                 : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium"
               >Analiz İçin Dosya Yükle</a
             >
+            {/if}
           </div>
           <div class="border-t border-gray-700 pb-3 pt-4">
             <div class="flex items-center px-5">
               <div class="flex-shrink-0">
                 <img
                   class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  src="https://www.wintechpratama.com/images/profile.jpg"
                   alt=""
                 />
               </div>
               <div class="ml-3">
                 <div class="text-base font-medium leading-none text-white">
-                  Tom Cook
+                  Kullanıcı
                 </div>
                 <div class="text-sm font-medium leading-none text-gray-400">
-                  tom@example.com
+                  kullanici@mail.com
                 </div>
               </div>
             </div>
@@ -252,17 +250,17 @@
               <a
                 href="#"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                >Your Profile</a
+                >Profil</a
               >
               <a
                 href="#"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                >Settings</a
+                >Ayarlar</a
               >
               <a
                 href="#"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                >Sign out</a
+                >Çıkış yap</a
               >
             </div>
           </div>

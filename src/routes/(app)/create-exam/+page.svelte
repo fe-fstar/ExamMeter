@@ -98,7 +98,7 @@
         </div>
     {:else}
         <div class="rounded-md descendant:text-custom_black">
-            <h1>Sınav Oluşturun</h1>
+            <h2>Sınav Oluşturun</h2>
             <form
                 class="flex flex-col justify-center items-center child:flex child:py-4 child:w-full divide-y"
             >

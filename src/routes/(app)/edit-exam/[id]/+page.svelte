@@ -73,7 +73,7 @@
 
 <Loading loading={loading}>
     <div class="rounded-md descendant:text-custom_black">
-        <h1>Sınav Düzenleyin</h1>
+        <h2>Sınav Düzenleyin</h2>
         <form
             class="flex flex-col justify-center items-center child:flex child:py-4 child:w-full divide-y"
         >
