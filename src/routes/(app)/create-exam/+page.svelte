@@ -50,7 +50,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                token: localStorage.getItem("token")
+                token: localStorage.getItem("token"),
             },
             body: JSON.stringify(exam),
         });
@@ -65,13 +65,8 @@
                         result.state === "granted" ||
                         result.state === "prompt"
                     ) {
-                        navigator.clipboard.writeText(`localhost:5173/exam/${exam_id}`).then(
-                            () => {
-                                /* clipboard successfully set */
-                            },
-                            () => {
-                                /* clipboard write failed */
-                            },
+                        navigator.clipboard.writeText(
+                            `localhost:5173/exam/${exam_id}`,
                         );
                     }
                 });
