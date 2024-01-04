@@ -32,7 +32,7 @@
 
 <Loading {loading}>
     <div class="flex flex-col">
-        <h1>Geçmiş Sınavlar</h1>
+        <h2>Geçmiş Sınavlar</h2>
         <div class="flex flex-wrap gap-4 justify-evenly">
             {#each exams as exam}
                 <ExamCard {exam} />

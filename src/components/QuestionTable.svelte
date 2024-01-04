@@ -4,7 +4,7 @@
     export let questions;
 </script>
 
-<div class="w-full overflow-x-auto rounded-lg">
+<div class="overflow-x-auto rounded-lg">
     <table>
         <thead
             ><tr
