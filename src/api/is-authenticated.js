@@ -2,13 +2,18 @@ import { backendUrl } from "./backend-url";
 
 export default async function isAuthenticated() {
     try {
-        let response = await fetch(`${backendUrl}/verify`, {
+        let response = await fetch(`${backendUrl}/get_user_information`, {
             method: "GET",
-            headers: { token: localStorage.token }
+            headers: { token: localStorage.getItem("token") }
         });
         
-        return response.success;
+        if (response.status != 200){
+            return false;
+        }else{
+            let parsed_response = await response.json();
+            return parsed_response.success;
+        }
     } catch (error) {
-        console.error(error.message);
+        return false;
     }
 };

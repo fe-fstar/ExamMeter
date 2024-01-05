@@ -1,1 +1,1 @@
-export const backendUrl = "http://localhost:4444/api";
+export let backendUrl = import.meta.env.VITE_API_URL;
