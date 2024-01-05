@@ -115,7 +115,7 @@
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-4">
                         <label for="description">Sınav Açıklaması</label>
-                        <input type="text" bind:value={exam.description} />
+                        <textarea bind:value={exam.description} />
                     </div>
                 </div>
                 <div
@@ -177,8 +177,7 @@
                                     </div>
                                 {/if}
                             </div>
-                            <input
-                                type="text"
+                            <textarea
                                 placeholder="Soru kökünü giriniz..."
                                 class="w-full"
                                 bind:value={question.text}
@@ -195,8 +194,7 @@
                                 >
                                     <div>
                                         {String.fromCharCode(65 + indexOption)})
-                                        <input
-                                            type="text"
+                                        <textarea
                                             placeholder="Yanıt içeriğini giriniz..."
                                             class="ml-4"
                                             bind:value={option.text}

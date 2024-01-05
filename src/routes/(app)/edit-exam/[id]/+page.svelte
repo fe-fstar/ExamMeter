@@ -61,6 +61,18 @@
         let parsed_response = await response.json();
 
         if (parsed_response.success) {
+            navigator.permissions
+                .query({ name: "clipboard-write" })
+                .then((result) => {
+                    if (
+                        result.state === "granted" ||
+                        result.state === "prompt"
+                    ) {
+                        navigator.clipboard.writeText(
+                            `localhost:5173/exam/${exam.id}`,
+                        );
+                    }
+                });
             edit_successful = true;
         } else {
             error_message = "Bir hata oluştu: " + parsed_response.message;
@@ -150,7 +162,7 @@
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-4">
                         <label for="description">Sınav Açıklaması</label>
-                        <input type="text" bind:value={exam.description} />
+                        <textarea bind:value={exam.description} />
                     </div>
                 </div>
                 <div
@@ -212,8 +224,7 @@
                                     </div>
                                 {/if}
                             </div>
-                            <input
-                                type="text"
+                            <textarea
                                 placeholder="Soru kökünü giriniz..."
                                 class="w-full"
                                 bind:value={question.text}
@@ -230,8 +241,7 @@
                                 >
                                     <div>
                                         {String.fromCharCode(65 + indexOption)})
-                                        <input
-                                            type="text"
+                                        <textarea
                                             placeholder="Yanıt içeriğini giriniz..."
                                             class="ml-4"
                                             bind:value={option.text}

@@ -6,6 +6,18 @@
 
     let loading = false;
     let exams = [];
+    let examDeleteMessage = "";
+
+    function handleMessageSend(e) {
+        examDeleteMessage = e.detail.message;
+        setTimeout(() => {
+            examDeleteMessage = "";
+        }, 5000);
+    }
+
+    function handleExamDelete(e) {
+        exams = exams.filter((exam) => exam.id !== e.detail.deletedExamId);
+    }
 
     onMount(async () => {
         loading = true;
@@ -33,9 +45,14 @@
 <Loading {loading}>
     <div class="flex flex-col">
         <h2>Geçmiş Sınavlar</h2>
+        <p></p>
         <div class="flex flex-wrap gap-4 justify-evenly">
             {#each exams as exam}
-                <ExamCard {exam} />
+                <ExamCard
+                    {exam}
+                    on:examDelete={handleExamDelete}
+                    on:messageSend={handleMessageSend}
+                />
             {/each}
         </div>
     </div>

@@ -2,17 +2,38 @@
     export let exam;
     import { onMount } from "svelte";
     import ConfirmAction from "./ConfirmAction.svelte";
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
+    import Loading from "./Loading.svelte";
+    import { backendUrl } from "../api/backend-url";
 
     const options = { year: "numeric", month: "long", day: "numeric" };
     let promptDeletion = false;
+    let deletionMessage = "";
+    let loading = false;
 
     function handleCancel() {
         promptDeletion = false;
     }
 
-    function handleConfirm() {
+    async function handleConfirm() {
+        loading = true;
+        let response = await fetch(`${backendUrl}/exam`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                token: localStorage.getItem("token"),
+            },
+            body: JSON.stringify({ id: exam.id, startTime: exam.startTime }),
+        });
+        let parsed_response = await response.json();
+        if (parsed_response.success) {
+            dispatch("examDelete", { deletedExamId: exam.id });
+        }
+        deletionMessage = parsed_response.message;
+        dispatch("messageSend", { message: parsed_response.message });
+        loading = false;
         promptDeletion = false;
-        console.log("### Item delete simulation ###");
     }
 
     let element;
@@ -36,7 +57,8 @@
         promptDeletion = false;
     }}
 />
-<div
+<Loading {loading}>
+    <div
     bind:this={element}
     class="basis-1/4 rounded-lg bg-gradient-to-br from-slate-700 to-gray-800 {clickable
         ? 'cursor-pointer hover:shadow-gray-800 hover:shadow-lg'
@@ -50,7 +72,7 @@
     </div>
     <div class="basis-1/12 flex items-center justify-between">
         <h5>{new Date(exam.startTime).toLocaleDateString("tr-TR", options)}</h5>
-        {#if ("grade" in exam) && exam.grade}
+        {#if "grade" in exam && exam.grade}
             <h3>{exam.grade}</h3>
         {/if}
     </div>
@@ -107,3 +129,4 @@
         </div>
     {/if}
 </div>
+</Loading>
