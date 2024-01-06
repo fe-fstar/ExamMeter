@@ -82,7 +82,7 @@
                         result.state === "prompt"
                     ) {
                         navigator.clipboard.writeText(
-                            `localhost:5173/exam/${exam.id}`,
+                            `${location.pathname.match(/^\/([^\/]*)/)[1]}/exam/${exam_id}`,
                         );
                     }
                 });
@@ -153,14 +153,13 @@
                 Sınav bağlantısı panonuza kopyalandı. Aynı işlemi aşağıdaki
                 bağlantıdan yapabilirsiniz:
             </h2>
-            <input type="text" readonly value="localhost:5173/exam/{exam_id}" />
+            <input type="text" readonly value="{location.pathname.match(/^\/([^\/]*)/)[1]}/exam/{exam_id}" />
         </div>
     {:else}
-        <div class="rounded-md descendant:text-custom_black">
-            <h2>Sınav Düzenleyin</h2>
-            <p class="text-red-600">{error_message}</p>
+        <div class="rounded-md">
+            <h2 class="text-custom_black">Sınav Düzenleyin</h2>
             <form
-                class="flex flex-col justify-center items-center child:flex child:py-4 child:w-full divide-y"
+                class="flex flex-col justify-center items-center child:flex child:py-4 child:w-full divide-y descendant:text-custom_black"
             >
                 <div class="flex-col">
                     <label for="title">Sınav Dersi</label>
@@ -415,6 +414,7 @@
                     <Button on:click={handleExamEdit}>Sınavı Kaydet</Button>
                 </div>
             </form>
+            <p class="text-center text-red-600">{error_message}</p>
         </div>
     {/if}
 </Loading>

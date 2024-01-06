@@ -21,11 +21,13 @@
     let selectedQuestionsFromPool = [];
 
     const handleCancel = () => {
+        selectedQuestionsFromPool = [];
         dispatch("cancel");
     };
 
     const handleConfirm = () => {
         dispatch("confirm", { selectedQuestionsFromPool });
+        selectedQuestionsFromPool = [];
     };
 
     onMount(() => {
@@ -102,7 +104,7 @@
                                     on:click={() => {
                                         if (
                                             selectedQuestionsFromPool.includes(
-                                                question,
+                                                question
                                             )
                                         ) {
                                             selectedQuestionsFromPool =
@@ -111,11 +113,12 @@
                                                         q.examId !==
                                                             question.examId &&
                                                         q.index !==
-                                                            question.index,
+                                                            question.index &&
+                                                        q.text !== question.text
                                                 );
                                         } else {
                                             selectedQuestionsFromPool.push(
-                                                question,
+                                                question
                                             );
                                             selectedQuestionsFromPool =
                                                 selectedQuestionsFromPool;
