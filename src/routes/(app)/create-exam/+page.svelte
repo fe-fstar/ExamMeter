@@ -18,6 +18,7 @@
             {
                 text: "",
                 options: [{ text: "", correctAnswer: false }],
+                score: ""
             },
         ],
     };
@@ -34,6 +35,8 @@
         modalQuestionPool = false;
     }
 
+    let error_message = "";
+
     function handleConfirm(e) {
         modalQuestionPool = false;
         // console.log("Bunlar seçildi:");
@@ -45,6 +48,19 @@
     }
 
     async function handleExamSubmit() {
+        let totalScore = exam.questions.reduce((acc, obj) => acc + obj.score, 0);
+        if(totalScore !== 100) {
+            error_message = "Soruların puanlarının toplamı 100 olmalı."
+            return;
+        }
+        if(Date.now() >= new Date(exam.startTime)) {
+            error_message = "Sınav başlangıç zamanı şu andan önce olamaz."
+            return;
+        }
+        if(new Date(exam.endTime) <= new Date(exam.startTime)) {
+            error_message = "Sınav başlangıç zamanı bitiş zamanından sonra olamaz."
+            return;
+        }
         loading_form = true;
         let response = await fetch(`${backendUrl}/exam`, {
             method: "POST",
@@ -177,11 +193,17 @@
                                     </div>
                                 {/if}
                             </div>
-                            <textarea
+                            <div class="flex flex-wrap justify-evenly items-center">
+                                <textarea
                                 placeholder="Soru kökünü giriniz..."
-                                class="w-full"
+                                class="basis-3/4"
                                 bind:value={question.text}
                             />
+                            <div class="flex flex-col justify-center items-center basis-1/4">
+                                <label for="score">Skor:</label>
+                                <input type="number" min="1" max="100" step="1" bind:value={question.score}>
+                            </div>
+                            </div>
                         </div>
                         <div class="flex flex-row flex-wrap justify-evenly">
                             <h3 class="basis-full">
@@ -355,6 +377,7 @@
                     <Button on:click={handleExamSubmit}>Sınavı Kaydet</Button>
                 </div>
             </form>
+            <p class="text-red-600 text-center">{error_message}</p>
         </div>
     {/if}
 </Loading>
