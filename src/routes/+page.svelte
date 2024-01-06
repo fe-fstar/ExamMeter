@@ -5,9 +5,13 @@
     import isAuthenticated from "../api/is-authenticated";
     import { browser } from "$app/environment";
 
-    if (isAuthenticated() && browser){
-        window.location = "/home";
-    }
+    (async ()=>{
+        let authenticated = await isAuthenticated();
+        if (authenticated && browser){
+            window.location = "/home";
+        }
+    })();
+    
 
     let loggingInMessage = "";
     let passwordVisible = false;
