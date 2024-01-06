@@ -19,6 +19,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tailwindcss/forms": "^0.5.7",
+		"cross-env": "^7.0.3",
+		"write-excel-file": "^1.4.27"
 		"@tailwindcss/forms": "^0.5.7"
 	}
 }

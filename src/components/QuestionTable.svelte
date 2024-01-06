@@ -30,10 +30,10 @@
                     <td>{question.numberOfCorrectAnswers}</td>
                     <td>{question.numberOfWrongAnswers}</td>
                     <td
-                        >{question.numberOfCorrectAnswers /
+                        >{Math.round(question.numberOfCorrectAnswers /
                             (question.numberOfCorrectAnswers +
                                 question.numberOfEmptyAnswers +
-                                question.numberOfWrongAnswers)}</td
+                                question.numberOfWrongAnswers) * 1000) / 1000}</td
                     >
                     <td>{question.difficulty}</td>
                     <td>{question.discriminationRatio}</td>
