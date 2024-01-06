@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "cross-env MODE=development vite dev",
-        "prod": "cross-env MODE=production vite dev --mode production",
+		"prod": "cross-env MODE=production vite dev --mode production",
 		"build": "vite build",
 		"preview": "vite preview"
 	},
@@ -19,6 +19,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tailwindcss/forms": "^0.5.7"
+		"@sveltejs/adapter-node": "^2.0.2",
+		"@tailwindcss/forms": "^0.5.7",
+		"cross-env": "^7.0.3",
+		"write-excel-file": "^1.4.27"
 	}
 }

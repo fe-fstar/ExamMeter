@@ -2,6 +2,16 @@
     import Button from "../components/Button.svelte";
     import Loading from "../components/Loading.svelte";
     import { backendUrl } from "../api/backend-url";
+    import isAuthenticated from "../api/is-authenticated";
+    import { browser } from "$app/environment";
+
+    (async ()=>{
+        let authenticated = await isAuthenticated();
+        if (authenticated && browser){
+            window.location = "/home";
+        }
+    })();
+    
 
     let loggingInMessage = "";
     let passwordVisible = false;
