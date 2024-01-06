@@ -47,6 +47,19 @@
     }
 
     async function handleExamEdit() {
+        let totalScore = exam.questions.reduce((acc, obj) => acc + obj.score, 0);
+        if(totalScore !== 100) {
+            error_message = "Soruların puanlarının toplamı 100 olmalı."
+            return;
+        }
+        if(Date.now() >= new Date(exam.startTime)) {
+            error_message = "Sınav başlangıç zamanı şu andan önce olamaz."
+            return;
+        }
+        if(new Date(exam.endTime) <= new Date(exam.startTime)) {
+            error_message = "Sınav başlangıç zamanı bitiş zamanından sonra olamaz."
+            return;
+        }
         loading_form = true;
 
         let response = await fetch(`${backendUrl}/exam`, {
