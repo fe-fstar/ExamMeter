@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import {goto} from "$app/navigation";
   import "../../app.css";
   import { scale, fade } from "svelte/transition";
   import { backendUrl } from "../../api/backend-url";
@@ -7,23 +8,34 @@
   let mobileMenu = false;
   let profileDropdown = false;
   let role;
+  let username = "";
+  let user_email = "";
 
   let directory;
   onMount(async () => {
     directory = location.pathname.match(/^\/([^\/]*)/)[1];
 
-    let response = await fetch(`${backendUrl}/get_role`, {
+    let response = await fetch(`${backendUrl}/get_user_information`, {
       headers: {
         "Content-Type": "application/json",
-        token: localStorage.token,
+        token: localStorage.getItem("token"),
       },
     });
     let parsed_response = await response.json();
 
     if (parsed_response.success) {
-      role = parsed_response.role;
+      username = parsed_response.user.username;
+      user_email = parsed_response.user.email;
+      role = parsed_response.user.role;
+    }else{
+      goto("/");
     }
   });
+
+  const signOut = () => {
+    localStorage.removeItem("token");
+    goto("/");
+  }
 </script>
 
 <div class="min-h-full">
@@ -80,7 +92,8 @@
               <div class="ml-4 flex items-center md:ml-6">
                 <!-- Profile dropdown -->
                 <div class="relative ml-3">
-                  <div>
+                  <div class="flex flex-row gap-2 items-center">
+                    {user_email}
                     <button
                       type="button"
                       on:click={() => {
@@ -114,7 +127,7 @@
                   {#if profileDropdown}
                     <div
                       transition:scale={{ duration: 150 }}
-                      class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none space-y-1 px-2"
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu-button"
@@ -126,10 +139,7 @@
                       >Profil</a>
                       <a
                         href="#"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                      >Ayarlar</a>
-                      <a
-                        href="#"
+                        on:click={signOut}
                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >Çıkış yap</a>
                     </div>
@@ -259,6 +269,7 @@
               >
               <a
                 href="#"
+                on:click={signOut}
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                 >Çıkış yap</a
               >

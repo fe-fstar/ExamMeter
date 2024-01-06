@@ -1,12 +1,15 @@
 <script>
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy, onMount, tick } from "svelte";
+    import {fade} from 'svelte/transition';
+    import { goto } from "$app/navigation";
     import Button from "../../../components/Button.svelte";
     import { browser } from "$app/environment";
     import Loading from "../../../components/Loading.svelte";
     import { backendUrl } from "../../../api/backend-url";
+    import isAuthenticated from "../../../api/is-authenticated";
 
     export let data;
-    let loading = false;
+    let loading = true;
 
     let difficultyScore = 1;
     let topicRelevanceScore = 1;
@@ -58,6 +61,8 @@
     let timeLeftToEndExamString = "-- : -- : --";
     let examSubmissionMessage = "";
 
+    let examErrorMessage = "";
+
     async function handleSubmit() {
         let examBody = {};
 
@@ -104,7 +109,6 @@
         examBody.methodRelevanceScore = methodRelevanceScore;
         examBody.difficultyScore = difficultyScore;
         examBody.id = exam.id;
-        console.log(examBody);
 
         try {
             let response = await fetch(`${backendUrl}/submit_exam`, {
@@ -177,9 +181,14 @@
 
     onMount(async () => {
         if (browser) {
-            let id = data.id;
+            let isAuth = await isAuthenticated();
+            if(!isAuth){
+                goto("/");
+            }
 
+            let id = data.id;
             loading = true;
+            examErrorMessage = "";
             try {
                 let response = await fetch(`${backendUrl}/exam/${id}`, {
                     headers: { token: localStorage.token },
@@ -188,17 +197,26 @@
 
                 if (parsed_response.success) {
                     exam = parsed_response.exam;
+                }else{
+                    examErrorMessage = parsed_response.message;
                 }
-                console.log(exam);
             } catch (error) {
                 console.log(error.message);
             }
             loading = false;
 
-            if (new Date(exam.startTime) > Date.now()) {
+            let examStartDate = new Date(exam.startTime);
+            var userTimezoneOffset = examStartDate.getTimezoneOffset() * 60000;
+            examStartDate = new Date(examStartDate.getTime() + userTimezoneOffset);
+
+            let examEndDate = new Date(exam.endTime);
+            examEndDate = new Date(examEndDate.getTime() + userTimezoneOffset);
+
+            if (examStartDate > Date.now()) {
                 // If exam has not started yet
                 intervalBeforeExam = setInterval(() => {
-                    timeForExamToStart = new Date(exam.startTime) - Date.now();
+                    timeForExamToStart = examStartDate - Date.now();
+
                     hoursLeft = Math.floor(timeForExamToStart / 3600000); // 1 hour = 3600000 milliseconds
                     minutesLeft = Math.floor(
                         (timeForExamToStart % 3600000) / 60000,
@@ -226,10 +244,10 @@
                                   ? "0" + secondsLeft
                                   : secondsLeft) || "00 : 00 : 00";
                 }, 1000);
-            } else if (new Date(exam.endTime) > Date.now()) {
+            } else if (examEndDate > Date.now()) {
                 // If exam has not ended yet
                 intervalDuringExam = setInterval(() => {
-                    timeForExamToEnd = new Date(exam.endTime) - Date.now();
+                    timeForExamToEnd = examEndDate - Date.now();
 
                     hoursLeft = Math.floor(timeForExamToEnd / 3600000); // 1 hour = 3600000 milliseconds
                     minutesLeft = Math.floor(
@@ -258,7 +276,7 @@
                 }, 1000);
                 currentQuestionIndex = 0;
             } else {
-                location.href = "/home";
+                //location.href = "/home";
             }
         }
     });
@@ -275,221 +293,231 @@
             <div
                 class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-custom_white shadow child:text-custom_black"
             >
-                {#if currentQuestionIndex === -1}
-                    <div
-                        class="px-4 py-5 flex flex-col justify-center items-center"
-                    >
-                        <h1>{exam.className}</h1>
-                        <h2>{exam.title}</h2>
-                    </div>
-                    <div
-                        class="px-4 py-5 flex flex-col justify-center items-center"
-                    >
-                        <p>{exam.description}</p>
-                        <h3>Sınavınızın başlamasına kalan süre:</h3>
-                        <h2>{timeLeftToStartExamString}</h2>
-                        <p>
-                            (Süre dolduğunda sınavınız otomatik olarak
-                            başlayacaktır)
-                        </p>
-                    </div>
-                {:else if currentQuestionIndex === exam.questions.length}
-                    <div
-                        class="px-4 py-5 flex flex-col justify-center items-center"
-                    >
-                        <div>
-                            <h2>
-                                Sınavınız bitmiştir. Aşağıdaki sınav geri dönüş
-                                formunu doldurarak sınav hakkındaki
-                                görüşlerinizi bildirebilir ve gelecekteki
-                                sınavların daha kaliteli olmasına destek
-                                sağlayabilirsiniz.
-                            </h2>
-                        </div>
-                        <div>
-                            <form>
-                                <div class="flex flex-col items-start my-6">
-                                    <label for="one"
-                                        >Sınav zorluğunu derecelendirin (1: Çok
-                                        kolay - 10: Çok zor: <span
-                                            class="font-bold"
-                                            >{difficultyScore}</span
-                                        ></label
-                                    >
-                                    <input
-                                        type="range"
-                                        name="one"
-                                        min="1"
-                                        max="10"
-                                        step="1"
-                                        class="w-full"
-                                        bind:value={difficultyScore}
-                                    />
-                                </div>
-                                <div class="flex flex-col items-start my-6">
-                                    <label for="two"
-                                        >Sınav konularının ve içeriğinin ders
-                                        ile alaka durumunu derecelendirin (1:
-                                        Tamamen alakasız - 10: Tamamen alakalı): <span
-                                            class="font-bold"
-                                            >{topicRelevanceScore}</span
-                                        ></label
-                                    >
-                                    <input
-                                        type="range"
-                                        name="two"
-                                        min="1"
-                                        max="10"
-                                        step="1"
-                                        class="w-full"
-                                        bind:value={topicRelevanceScore}
-                                    />
-                                </div>
-                                <div class="flex flex-col items-start my-6">
-                                    <label for="two"
-                                        >Sınav soru türlerinin ders pratiği ile
-                                        alaka durumunu değerlendirin (1: Tamamen
-                                        alakasız - 10: Tamamen alakalı): <span
-                                            class="font-bold"
-                                            >{methodRelevanceScore}</span
-                                        ></label
-                                    >
-                                    <input
-                                        type="range"
-                                        name="three"
-                                        min="1"
-                                        max="10"
-                                        step="1"
-                                        class="w-full"
-                                        bind:value={methodRelevanceScore}
-                                    />
-                                </div>
-                                <div class="flex flex-col items-start my-6">
-                                    <label for="four"
-                                        >Ek Görüşünüz Var İse Lütfen Aşağıda
-                                        Belirtiniz</label
-                                    >
-                                    <textarea
-                                        name="four"
-                                        placeholder="Görüşlerinizi buradan belirtebilirsiniz..."
-                                        class="w-full"
-                                        bind:value={additionalNote}
-                                    />
-                                </div>
-                                <div class="grid place-items-center gap-y-4">
-                                    <Button on:click={handleSubmit}
-                                        >Gönder</Button
-                                    >
-                                    <p>{examSubmissionMessage}</p>
-                                </div>
-                            </form>
-                        </div>
+                {#if examErrorMessage != ""}
+                    <div class="text-md h-48 flex flex-col gap-4 items-center justify-center">
+                        {examErrorMessage}
+
+                        <Button on:click={()=>{goto("/home");}}>Ana sayfaya geri dön.</Button>
                     </div>
                 {:else}
-                    <div class="px-4 py-5 sm:px-6">
+                    <div class:hidden={loading}>
+                    {#if currentQuestionIndex === -1}
                         <div
-                            class="flex justify-between items-center child:text-custom_black"
+                            class="px-4 py-5 flex flex-col justify-center items-center"
                         >
-                            <div>{exam.title}</div>
-                            <div>{timeLeftToEndExamString}</div>
+                            <h1>{exam.className}</h1>
+                            <h2>{exam.title}</h2>
                         </div>
-                    </div>
-                    <div class="px-4 py-5 sm:p-6 child:text-custom_black">
-                        <p>
-                            <span class="font-bold"
-                                >{currentQuestionIndex + 1})</span
+                        <div
+                            class="px-4 py-5 flex flex-col justify-center items-center"
+                        >
+                            <p>{exam.description}</p>
+                            <h3>Sınavınızın başlamasına kalan süre:</h3>
+                            <h2>{timeLeftToStartExamString}</h2>
+                            <p>
+                                (Süre dolduğunda sınavınız otomatik olarak
+                                başlayacaktır)
+                            </p>
+                        </div>
+                    {:else if currentQuestionIndex === exam.questions.length}
+                        <div
+                            class="px-4 py-5 flex flex-col justify-center items-center"
+                        >
+                            <div>
+                                <h2>
+                                    Sınavınız bitmiştir. Aşağıdaki sınav geri dönüş
+                                    formunu doldurarak sınav hakkındaki
+                                    görüşlerinizi bildirebilir ve gelecekteki
+                                    sınavların daha kaliteli olmasına destek
+                                    sağlayabilirsiniz.
+                                </h2>
+                            </div>
+                            <div>
+                                <form>
+                                    <div class="flex flex-col items-start my-6">
+                                        <label for="one"
+                                            >Sınav zorluğunu derecelendirin (1: Çok
+                                            kolay - 10: Çok zor: <span
+                                                class="font-bold"
+                                                >{difficultyScore}</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="range"
+                                            name="one"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            class="w-full"
+                                            bind:value={difficultyScore}
+                                        />
+                                    </div>
+                                    <div class="flex flex-col items-start my-6">
+                                        <label for="two"
+                                            >Sınav konularının ve içeriğinin ders
+                                            ile alaka durumunu derecelendirin (1:
+                                            Tamamen alakasız - 10: Tamamen alakalı): <span
+                                                class="font-bold"
+                                                >{topicRelevanceScore}</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="range"
+                                            name="two"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            class="w-full"
+                                            bind:value={topicRelevanceScore}
+                                        />
+                                    </div>
+                                    <div class="flex flex-col items-start my-6">
+                                        <label for="two"
+                                            >Sınav soru türlerinin ders pratiği ile
+                                            alaka durumunu değerlendirin (1: Tamamen
+                                            alakasız - 10: Tamamen alakalı): <span
+                                                class="font-bold"
+                                                >{methodRelevanceScore}</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="range"
+                                            name="three"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            class="w-full"
+                                            bind:value={methodRelevanceScore}
+                                        />
+                                    </div>
+                                    <div class="flex flex-col items-start my-6">
+                                        <label for="four"
+                                            >Ek Görüşünüz Var İse Lütfen Aşağıda
+                                            Belirtiniz</label
+                                        >
+                                        <textarea
+                                            name="four"
+                                            placeholder="Görüşlerinizi buradan belirtebilirsiniz..."
+                                            class="w-full"
+                                            bind:value={additionalNote}
+                                        />
+                                    </div>
+                                    <div class="grid place-items-center gap-y-4">
+                                        <Button on:click={handleSubmit}
+                                            >Gönder</Button
+                                        >
+                                        <p>{examSubmissionMessage}</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {:else}
+                        <div class="px-4 py-5 sm:px-6">
+                            <div
+                                class="flex justify-between items-center child:text-custom_black"
                             >
-                            {exam.questions[currentQuestionIndex].text}
-                        </p>
-                        <br />
-                        {#each exam.questions[currentQuestionIndex].options as option, index}
-                            <!-- svelte-ignore a11y-click-events-have-key-events -->
-                            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-                            <p
-                                on:click={() => {
-                                    let foundIndex = studentAnswers.findIndex(
-                                        (obj) =>
-                                            obj.questionIndex ===
-                                            exam.questions[currentQuestionIndex]
-                                                .index,
-                                    );
+                                <div>{exam.title}</div>
+                                <div>{timeLeftToEndExamString}</div>
+                            </div>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6 child:text-custom_black">
+                            <p>
+                                <span class="font-bold"
+                                    >{currentQuestionIndex + 1})</span
+                                >
+                                {exam.questions[currentQuestionIndex].text}
+                            </p>
+                            <br />
+                            {#each exam.questions[currentQuestionIndex].options as option, index}
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                                <p
+                                    on:click={() => {
+                                        let foundIndex = studentAnswers.findIndex(
+                                            (obj) =>
+                                                obj.questionIndex ===
+                                                exam.questions[currentQuestionIndex]
+                                                    .index,
+                                        );
 
-                                    if (foundIndex !== -1) {
-                                        if (
-                                            option.index ===
-                                            studentAnswers[foundIndex]
-                                                .optionIndex
-                                        ) {
-                                            studentAnswers =
-                                                studentAnswers.filter(
-                                                    (obj) =>
-                                                        obj.optionIndex !==
-                                                            option.index &&
-                                                        obj.questionIndex ===
-                                                            exam.questions[
-                                                                currentQuestionIndex
-                                                            ].index,
-                                                );
+                                        if (foundIndex !== -1) {
+                                            if (
+                                                option.index ===
+                                                studentAnswers[foundIndex]
+                                                    .optionIndex
+                                            ) {
+                                                studentAnswers =
+                                                    studentAnswers.filter(
+                                                        (obj) =>
+                                                            obj.optionIndex !==
+                                                                option.index &&
+                                                            obj.questionIndex ===
+                                                                exam.questions[
+                                                                    currentQuestionIndex
+                                                                ].index,
+                                                    );
+                                            } else {
+                                                studentAnswers[foundIndex] = {
+                                                    questionIndex:
+                                                        exam.questions[
+                                                            currentQuestionIndex
+                                                        ].index,
+                                                    optionIndex: option.index,
+                                                };
+                                                studentAnswers = [
+                                                    ...studentAnswers,
+                                                ];
+                                            }
                                         } else {
-                                            studentAnswers[foundIndex] = {
-                                                questionIndex:
-                                                    exam.questions[
-                                                        currentQuestionIndex
-                                                    ].index,
-                                                optionIndex: option.index,
-                                            };
                                             studentAnswers = [
+                                                {
+                                                    questionIndex:
+                                                        exam.questions[
+                                                            currentQuestionIndex
+                                                        ].index,
+                                                    optionIndex: option.index,
+                                                },
                                                 ...studentAnswers,
                                             ];
                                         }
-                                    } else {
-                                        studentAnswers = [
-                                            {
-                                                questionIndex:
-                                                    exam.questions[
-                                                        currentQuestionIndex
-                                                    ].index,
-                                                optionIndex: option.index,
-                                            },
-                                            ...studentAnswers,
-                                        ];
-                                    }
-                                }}
-                                class="p-4 cursor-pointer hover:bg-slate-300 rounded-lg {studentAnswers.some(
-                                    (obj) =>
-                                        obj.questionIndex ==
-                                            exam.questions[currentQuestionIndex]
-                                                .index &&
-                                        obj.optionIndex == option.index,
-                                )
-                                    ? 'bg-indigo-300'
-                                    : ''} bg-pink"
-                            >
-                                <span class="font-bold"
-                                    >{String.fromCharCode(65 + index)})</span
+                                    }}
+                                    class="p-4 cursor-pointer hover:bg-slate-300 rounded-lg {studentAnswers.some(
+                                        (obj) =>
+                                            obj.questionIndex ==
+                                                exam.questions[currentQuestionIndex]
+                                                    .index &&
+                                            obj.optionIndex == option.index,
+                                    )
+                                        ? 'bg-indigo-300'
+                                        : ''} bg-pink"
                                 >
-                                {option.text}
-                            </p>
-                        {/each}
-                    </div>
-                    <div class="px-4 py-4 sm:px-6">
-                        <div class="flex justify-evenly items-center">
-                            <Button
-                                disabled={!exam.allowJumping}
-                                on:click={() => {
-                                    --currentQuestionIndex;
-                                }}>Önceki Soru</Button
-                            >
-                            <Button
-                                on:click={() => {
-                                    ++currentQuestionIndex;
-                                }}
-                                >{currentQuestionIndex <
-                                exam.questions.length - 1
-                                    ? "Sonraki Soru"
-                                    : "Sınavı Bitir"}</Button
-                            >
+                                    <span class="font-bold"
+                                        >{String.fromCharCode(65 + index)})</span
+                                    >
+                                    {option.text}
+                                </p>
+                            {/each}
                         </div>
+                        <div class="px-4 py-4 sm:px-6">
+                            <div class="flex justify-evenly items-center">
+                                <Button
+                                    disabled={!exam.allowJumping}
+                                    on:click={() => {
+                                        --currentQuestionIndex;
+                                    }}>Önceki Soru</Button
+                                >
+                                <Button
+                                    on:click={() => {
+                                        ++currentQuestionIndex;
+                                    }}
+                                    >{currentQuestionIndex <
+                                    exam.questions.length - 1
+                                        ? "Sonraki Soru"
+                                        : "Sınavı Bitir"}</Button
+                                >
+                            </div>
+                        </div>
+                    {/if}
                     </div>
                 {/if}
             </div>
