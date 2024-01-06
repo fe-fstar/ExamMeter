@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "cross-env MODE=development vite dev",
+        "prod": "cross-env MODE=production vite dev --mode production",
 		"build": "vite build",
 		"preview": "vite preview"
 	},
