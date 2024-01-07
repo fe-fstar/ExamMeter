@@ -492,12 +492,13 @@
                         </div>
                         <div class="px-4 py-4 sm:px-6">
                             <div class="flex justify-evenly items-center">
+                                {#if exam.allowJumping && currentQuestionIndex > 0}
                                 <Button
-                                    disabled={!exam.allowJumping}
-                                    on:click={() => {
-                                        --currentQuestionIndex;
-                                    }}>Önceki Soru</Button
-                                >
+                                on:click={() => {
+                                    --currentQuestionIndex;
+                                }}>Önceki Soru</Button
+                            >
+                                {/if}
                                 <Button
                                     on:click={() => {
                                         ++currentQuestionIndex;
