@@ -13,7 +13,7 @@
 
   let directory;
   onMount(async () => {
-    directory = location.pathname.match(/^\/([^\/]*)/)[1];
+    directory = location.href.split("/")[2] + location.href.split("/")[3];
 
     let response = await fetch(`${backendUrl}/get_user_information`, {
       headers: {

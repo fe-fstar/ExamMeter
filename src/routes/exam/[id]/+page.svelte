@@ -94,15 +94,7 @@
         }
 
         studentAnswersText = studentAnswersText.join("");
-        console.log("Student Answers: ", studentAnswersText);
 
-        console.log("Original Questions:", originalQuestions)
-        examBody.grade = 0;
-        for(let i = 0; i < originalQuestions.length; ++i) {
-            if(originalQuestions[i].options[Number(studentAnswersText.charAt(i))].correct_answer && originalQuestions[i].score) {
-                examBody.grade += originalQuestions[i].score;
-            }
-        }
         examBody.answers = studentAnswersText;
         examBody.additionalNote = additionalNote;
         examBody.topicRelevanceScore = topicRelevanceScore;

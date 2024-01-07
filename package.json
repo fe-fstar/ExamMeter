@@ -10,6 +10,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-node": "^1.0.0-next.106",
 		"@sveltejs/kit": "^1.20.4",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
@@ -19,7 +20,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-node": "^2.0.2",
 		"@tailwindcss/forms": "^0.5.7",
 		"cross-env": "^7.0.3",
 		"write-excel-file": "^1.4.27"

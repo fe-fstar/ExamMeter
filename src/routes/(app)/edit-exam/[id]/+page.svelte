@@ -82,7 +82,7 @@
                         result.state === "prompt"
                     ) {
                         navigator.clipboard.writeText(
-                            `${location.pathname.match(/^\/([^\/]*)/)[1]}/exam/${exam_id}`,
+                            `${location.href.split("/")[2]}/exam/${exam_id}`,
                         );
                     }
                 });
@@ -153,7 +153,7 @@
                 Sınav bağlantısı panonuza kopyalandı. Aynı işlemi aşağıdaki
                 bağlantıdan yapabilirsiniz:
             </h2>
-            <input type="text" readonly value="{location.pathname.match(/^\/([^\/]*)/)[1]}/exam/{exam_id}" />
+            <input type="text" readonly value="{location.href.split("/")[2]}/exam/{exam_id}" />
         </div>
     {:else}
         <div class="rounded-md">
