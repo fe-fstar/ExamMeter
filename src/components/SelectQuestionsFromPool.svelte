@@ -99,6 +99,10 @@
                                     </div>
                                 {/each}
                             </div>
+                            <div class="flex justify-evenly items-center flex-wrap">
+                                <h3>Zorluk: {Math.round(question.correctCount / (question.correctCount + question.incorrectCount + question.unansweredCount) * 10)}</h3>
+                                <h3>Madde Ayırt Edicilik: {question.discriminationRatio}</h3>
+                            </div>
                             <div class="descendant:text-custom_white">
                                 <Button
                                     on:click={() => {

@@ -77,14 +77,14 @@
                             class="child:border child:border-slate-600/50 child:p-4"
                             ><td>Frekans Yüzdesi (%)</td
                             >{#each data.options as option}
-                                <td>{option.frequencyPercentage}</td>
+                                <td>{option.frequency_ratio}</td>
                             {/each}</tr
                         >
                         <tr
                             class="child:border child:border-slate-600/50 child:p-4"
                             ><td>Ayırt Edicilik Oranı</td
                             >{#each data.options as option}
-                                <td>{option.discriminationRatio}</td>
+                                <td>{option.discrimination_ratio}</td>
                             {/each}</tr
                         >
                     </tbody>
@@ -95,14 +95,7 @@
             >
                 <h4>Boş bırakılma sayısı ve yüzdesi</h4>
                 <h4>
-                    Sayı: {data.numberOfEmptyAnswers} | Yüzde: {(Math.round(
-                        data.numberOfEmptyAnswers /
-                            (data.numberOfEmptyAnswers +
-                                data.numberOfCorrectAnswers +
-                                data.numberOfWrongAnswers),
-                    ) *
-                        10000) /
-                        100}
+                    Sayı: {data.unansweredCount} | Yüzde: {data.unansweredRatio}
                 </h4>
             </div>
         </div>

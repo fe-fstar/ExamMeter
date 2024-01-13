@@ -204,7 +204,9 @@
             let examEndDate = new Date(exam.endTime);
             examEndDate = new Date(examEndDate.getTime() + userTimezoneOffset);
 
+
             if (examStartDate > Date.now()) {
+                console.log("Here");
                 // If exam has not started yet
                 intervalBeforeExam = setInterval(() => {
                     timeForExamToStart = examStartDate - Date.now();
@@ -237,6 +239,7 @@
                                   : secondsLeft) || "00 : 00 : 00";
                 }, 1000);
             } else if (examEndDate > Date.now()) {
+                console.log("There");
                 // If exam has not ended yet
                 intervalDuringExam = setInterval(() => {
                     timeForExamToEnd = examEndDate - Date.now();
@@ -267,8 +270,6 @@
                                   : secondsLeft) || "00 : 00 : 00";
                 }, 1000);
                 currentQuestionIndex = 0;
-            } else {
-                //location.href = "/home";
             }
         }
     });

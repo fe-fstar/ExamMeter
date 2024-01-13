@@ -19,16 +19,19 @@
             {
                 text: "",
                 options: [{ text: "", correctAnswer: false }],
-                score: ""
+                score: "",
             },
         ],
     };
 
+    let difficulty = 0;
+    let tolerance = 0;
     let exam_id = "";
     let submit_successful = false;
     let loading_form = false;
     let loading_exam_pool = false;
     let questionsFromPool = [];
+    let displayAutomaticExamMenu = false;
 
     let modalQuestionPool = false;
 
@@ -48,18 +51,52 @@
         ];
     }
 
+    async function handleAutomaticAdd() {
+        try {
+            let response = await fetch(
+                `${backendUrl}/question_plus_difficulties`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify({
+                        class_name: exam.className,
+                        difficulty,
+                        tolerance,
+                    }),
+                },
+            );
+
+            let parsed_response = await response.json();
+
+            if (parsed_response.success) {
+                exam.questions = parsed_response.questions;
+            }
+
+            error_message = parsed_response.message;
+        } catch (error) {
+            error_message = error.message;
+        }
+    }
+
     async function handleExamSubmit() {
-        let totalScore = exam.questions.reduce((acc, obj) => acc + obj.score, 0);
-        if(totalScore !== 100) {
-            error_message = "Soruların puanlarının toplamı 100 olmalı."
+        let totalScore = exam.questions.reduce(
+            (acc, obj) => acc + obj.score,
+            0,
+        );
+        if (totalScore !== 100) {
+            error_message = "Soruların puanlarının toplamı 100 olmalı.";
             return;
         }
-        if(Date.now() >= new Date(exam.startTime)) {
-            error_message = "Sınav başlangıç zamanı şu andan önce olamaz."
+        if (Date.now() >= new Date(exam.startTime)) {
+            error_message = "Sınav başlangıç zamanı şu andan önce olamaz.";
             return;
         }
-        if(new Date(exam.endTime) <= new Date(exam.startTime)) {
-            error_message = "Sınav başlangıç zamanı bitiş zamanından sonra olamaz."
+        if (new Date(exam.endTime) <= new Date(exam.startTime)) {
+            error_message =
+                "Sınav başlangıç zamanı bitiş zamanından sonra olamaz.";
             return;
         }
         loading_form = true;
@@ -111,7 +148,11 @@
                 Sınav bağlantısı panonuza kopyalandı. Aynı işlemi aşağıdaki
                 bağlantıdan yapabilirsiniz:
             </h2>
-            <input type="text" readonly value="{location.href.split("/")[2]}/exam/{exam_id}" />
+            <input
+                type="text"
+                readonly
+                value="{location.href.split('/')[2]}/exam/{exam_id}"
+            />
         </div>
     {:else}
         <div class="rounded-md">
@@ -194,16 +235,26 @@
                                     </div>
                                 {/if}
                             </div>
-                            <div class="flex flex-wrap justify-evenly items-center">
+                            <div
+                                class="flex flex-wrap justify-evenly items-center"
+                            >
                                 <textarea
-                                placeholder="Soru kökünü giriniz..."
-                                class="basis-3/4"
-                                bind:value={question.text}
-                            />
-                            <div class="flex flex-col justify-center items-center basis-1/4">
-                                <label for="score">Skor:</label>
-                                <input type="number" min="1" max="100" step="1" bind:value={question.score}>
-                            </div>
+                                    placeholder="Soru kökünü giriniz..."
+                                    class="basis-3/4"
+                                    bind:value={question.text}
+                                />
+                                <div
+                                    class="flex flex-col justify-center items-center basis-1/4"
+                                >
+                                    <label for="score">Skor:</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="100"
+                                        step="1"
+                                        bind:value={question.score}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div class="flex flex-row flex-wrap justify-evenly">
@@ -338,6 +389,35 @@
                         >
                     </div>
                 </div>
+                {#if displayAutomaticExamMenu}
+                    <div class="flex justify-evenly items-center">
+                        <div class="flex flex-col items-start justify-center">
+                            <label for="difficulty">Zorluk</label>
+                            <input
+                                bind:value={difficulty}
+                                type="number"
+                                min="0"
+                                max="10"
+                                step="1"
+                            />
+                        </div>
+                        <div class="flex flex-col items-start justify-center">
+                            <label for="tolerance">Tolerans</label>
+                            <input
+                                bind:value={tolerance}
+                                type="number"
+                                min="0"
+                                max="5"
+                                step="1"
+                            />
+                        </div>
+                    </div>
+                    <div class="descendant:text-white mx-auto w-full flex items-center justify-center">
+                        <Button type={"button"} on:click={handleAutomaticAdd}
+                            >Soruları Ekle</Button
+                        >
+                    </div>
+                {/if}
                 <div
                     class="flex justify-evenly items-center flex-wrap descendant:text-custom_white"
                 >
@@ -360,10 +440,17 @@
                             );
                             let parsed_response = await response.json();
                             if (parsed_response.success) {
+                                console.log(parsed_response.questions);
                                 questionsFromPool = parsed_response.questions;
                             }
                             loading_exam_pool = false;
                         }}>Havuzdan Soru Ekle</Button
+                    >
+                    <Button
+                        type={"button"}
+                        on:click={() => {
+                            displayAutomaticExamMenu = true;
+                        }}>Otomatik Zorlukla Sınav Oluştur</Button
                     >
                     <Button
                         type={"button"}
