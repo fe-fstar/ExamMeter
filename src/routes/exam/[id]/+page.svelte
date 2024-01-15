@@ -71,9 +71,7 @@
         );
 
         // Sort questions to their original state (non-shuffled)
-        let originalQuestions = exam.questions.sort(
-            (a, b) => a.index - b.index,
-        );
+        let originalQuestions = exam.questions.sort((a, b) => a.index - b.index);
 
         for(let question of originalQuestions) {
             question.options = question.options.sort((a, b) => a.index - b.index);
@@ -84,7 +82,7 @@
         let studentAnswersText = Array(exam.questions.length).fill("-");
         for (let i = 0; i < originalQuestions.length; ++i) {
             let foundIndex = studentAnswers.findIndex(
-                (obj) => obj.questionIndex === i,
+                (obj) => obj.questionIndex === i.index,
             );
 
             if (foundIndex !== -1) {

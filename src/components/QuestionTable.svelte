@@ -34,7 +34,7 @@
                         >{question.correct_ratio}</td
                     >
                     <td>{question.difficultyMessage}</td>
-                    <td>{question.discriminationRatio}</td>
+                    <td>{Math.round(question.discriminationRatio * 100) / 100}</td>
                     <td>{question.discriminationStatus}</td>
                 </tr>
             {/each}
