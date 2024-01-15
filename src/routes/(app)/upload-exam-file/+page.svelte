@@ -493,8 +493,9 @@
                                     : question.correctPossibility <= 0.8
                                       ? "Kolay"
                                       : "Çok kolay",
-                        discriminationRatio: question.correlation,
+                        discriminationRatio: question.correlation || "-",
                         discriminationStatus:
+                            !question.correlation ? "-" :
                             question.correlation <= 0.2
                                 ? "Madde çok zayıf, testten çıkarılmalı"
                                 : question.correlation <= 0.3
