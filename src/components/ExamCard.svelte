@@ -40,7 +40,7 @@
     let clickable;
 
     onMount(() => {
-        clickable = new Date(exam.endTime) < Date.now();
+        clickable = new Date(exam.endTime).getTime() + new Date(exam.endTime).getTimezoneOffset() * 60000 < Date.now();
         if (clickable) {
             element.addEventListener("click", () => {
                 location.href = `/stats/${exam.id}`;
@@ -60,7 +60,7 @@
 <Loading {loading}>
     <div
     bind:this={element}
-    class="basis-1/4 rounded-lg bg-gradient-to-br from-slate-700 to-gray-800 {clickable
+    class="basis-1/4 min-w-[200px] rounded-lg bg-gradient-to-br from-slate-700 to-gray-800 {clickable
         ? 'cursor-pointer hover:shadow-gray-800 hover:shadow-lg'
         : 'opacity-[85%]'} shadow-gray-800 shadow-md duration-200 descendant:text-custom_white flex flex-col p-4"
 >
@@ -76,7 +76,7 @@
             <h3>{exam.grade}</h3>
         {/if}
     </div>
-    {#if new Date(exam.startTime) > Date.now() && !("grade" in exam)}
+    {#if new Date(exam.startTime).getTime() + new Date(exam.startTime).getTimezoneOffset() * 60000 > Date.now() && !("grade" in exam)}
         <div class="basis-1/12 flex items-center justify-evenly child:rounded">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
