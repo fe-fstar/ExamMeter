@@ -7,6 +7,7 @@
     let loading = false;
     let exams = [];
     let examDeleteMessage = "";
+    let role = "student";
 
     function handleMessageSend(e) {
         examDeleteMessage = e.detail.message;
@@ -34,6 +35,18 @@
             if (parsed_response.success) {
                 exams = parsed_response.exams;
             }
+
+            let userDetails = await fetch(`${backendUrl}/get_user_information`, {
+            headers: {
+                "Content-Type": "application/json",
+                token: localStorage.getItem("token"),
+            },
+            });
+            let parsed_userDetails = await userDetails.json();
+
+            if (parsed_userDetails.success) {
+                role = parsed_userDetails.user.role;
+            }
         } catch (error) {
             console.log(error.message);
         }
@@ -50,6 +63,7 @@
             {#each exams as exam}
                 <ExamCard
                     {exam}
+                    userRole={role}
                     on:examDelete={handleExamDelete}
                     on:messageSend={handleMessageSend}
                 />

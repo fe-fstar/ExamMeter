@@ -8,6 +8,7 @@
     import { backendUrl } from "../api/backend-url";
 
     const options = { year: "numeric", month: "long", day: "numeric" };
+    export let userRole = "student";
     let promptDeletion = false;
     let deletionMessage = "";
     let loading = false;
@@ -40,7 +41,7 @@
     let clickable;
 
     onMount(() => {
-        clickable = new Date(exam.endTime).getTime() + new Date(exam.endTime).getTimezoneOffset() * 60000 < Date.now();
+        clickable = new Date(exam.endTime).getTime() + new Date(exam.endTime).getTimezoneOffset() * 60000 < Date.now() && userRole == "teacher";
         if (clickable) {
             element.addEventListener("click", () => {
                 location.href = `/stats/${exam.id}`;
