@@ -48,7 +48,7 @@
                 stroke-width="1.5"
                 stroke="currentColor"
                 data-slot="icon"
-                class="w-6 h-6"
+                class="w-6 h-6 close-svg"
             >
                 <path
                     stroke-linecap="round"
@@ -116,5 +116,11 @@
         max-width: 900px;
         cursor: default;
         position: relative;
+    }
+    .close-svg {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        cursor: pointer;
     }
 </style>

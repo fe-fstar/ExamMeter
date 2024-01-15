@@ -11,6 +11,7 @@
         CategoryScale,
         LinearScale,
     } from "chart.js";
+    import ShowStudents from "../../../../components/ShowStudents.svelte";
 
     export let data;
     let loading = true;
@@ -24,6 +25,7 @@
     let topicRelevanceScoreList;
 
     let questions = [];
+    let students = [];
     let selectedChart = -1;
 
     let chart4;
@@ -68,7 +70,8 @@
                 Math.round(parsed_response.std_deviation * 100) / 100;
             questions = parsed_response.questions;
             grades = parsed_response.gradesList;
-            console.log(parsed_response);
+            students = parsed_response.students;
+            console.log(students);
         } catch (error) {
             console.log(error.message);
         }
@@ -299,6 +302,9 @@
                         <h2>Standart Sapma:</h2>
                         <h2>{standardDeviation}</h2>
                     </div>
+                </div>
+                <div class="flex justify-center">
+                    <ShowStudents {students}></ShowStudents>
                 </div>
             </div>
             <div>
