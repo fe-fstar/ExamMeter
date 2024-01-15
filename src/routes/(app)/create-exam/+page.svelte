@@ -72,7 +72,7 @@
             let parsed_response = await response.json();
 
             if (parsed_response.success) {
-                exam.questions = parsed_response.questions.length === 0 ? [] : parsed_response.questions;
+                exam.questions = parsed_response.questions.length === 0 ? exam.questions : parsed_response.questions;
             }
 
             error_message = parsed_response.message;
